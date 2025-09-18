@@ -7,11 +7,11 @@ install:
 build:
 	npx vite build
 
+preview: 
+	npx vite preciew
+	
 test:
 	npm test
 
 lint:
 	npx eslint .
-
-preview: 
-	npx vite preciew
