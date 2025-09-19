@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>RSS</title>
   </head>
   <body class="d-flex flex-column min-vh-100">
@@ -40,7 +41,7 @@
                 </div>
               </div>
             </form>
-            <p class="mt-2 mb-0 text-secondary">Пример: https://lorem-rss.hexlet.app/feed</p>
+            <p class="mt-3 mb-0 text-secondary">Пример: https://lorem-rss.hexlet.app/feed</p>
             <p class="feedback m-0 position-absolute small text-danger"></p>
           </div>
         </div>
@@ -52,15 +53,8 @@
         </div>
       </section>
     </main>
-    <footer class="footer border-top py-3 mt-5 bg-light">
-      <div class="container-xl">
-        <div class="text-center">
-          created by
-          <a href="https://ru.hexlet.io/professions/frontend/projects/11" target="_blank">Hexlet</a>
-        </div>
-      </div>
     </footer>
-
-    <script src="src/index.js"></script>
+    <script type="module" src="src/js/main.js"></script>
+    <script type="module" src="src/index.js"></script>
   </body>
 </html>

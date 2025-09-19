@@ -1,9 +1,6 @@
 dev:
 	npx vite
 
-install:
-	npm ci
-
 build:
 	npx vite build
 

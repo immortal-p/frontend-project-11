@@ -2,3 +2,6 @@
 .log
 dist
 asserts
+dist/
+build/
+.vite/
