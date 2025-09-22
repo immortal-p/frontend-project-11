@@ -280,6 +280,7 @@
     "object.groupby": "^1.0.3",
     "object.values": "^1.2.1",
     "obuf": "^1.1.2",
+    "on-change": "^5.0.1",
     "on-finished": "^2.4.1",
     "on-headers": "^1.1.0",
     "once": "^1.4.0",
@@ -412,6 +413,7 @@
     "utila": "^0.4.0",
     "utils-merge": "^1.0.1",
     "uuid": "^8.3.2",
+    "valtio": "^2.1.7",
     "vary": "^1.1.2",
     "watchpack": "^2.4.4",
     "wbuf": "^1.7.3",
@@ -431,7 +433,8 @@
     "wrappy": "^1.0.2",
     "ws": "^8.18.3",
     "wsl-utils": "^0.1.0",
-    "yocto-queue": "^0.1.0"
+    "yocto-queue": "^0.1.0",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
@@ -441,10 +444,7 @@
     "vite": "^7.1.6"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
