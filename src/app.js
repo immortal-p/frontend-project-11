@@ -1,41 +1,60 @@
-import validator from './validator.js'
-import { proxy, subscribe, snapshot } from 'valtio/vanilla'
+import * as yup from 'yup'
+import i18next from 'i18next'
+import resources from './locales/ru.js'
+import watch from './view.js'
 
-const state = proxy({
-    url: '',
-    errors: [],
-})
+export default async () => {
+    const defaultLang = 'ru'
 
-export default () => {
-    const form = document.querySelector('.rss-form')
-    const input = form.querySelector('input')
-    form.addEventListener('submit', async (e) => {
+    const elements = {
+        feedback: document.querySelector('.feedback'),
+    }
+
+    const state = {
+        feedback: {
+            success: null,
+            error : null,
+        },
+        urlList: [],
+    }
+
+    const i18n = i18next.createInstance()
+    await i18n.init({
+        lng: defaultLang,
+        debug: false,
+        resources,
+    })
+
+    const watchedState = watch(elements, i18n, state)
+
+    yup.setLocale({
+        string: {
+            url: () => ({ key: 'errors.invalidUrl' }),
+        },
+    })
+
+
+    const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists'}), value => !state.urlList.includes(value))
+
+
+    const container = document.querySelector('.container-fluid')
+    const input = document.querySelector('#url-input')
+
+    container.addEventListener('submit', async (e) => {
         e.preventDefault()
+        const text = input.value.trim()
+
         try {
-            await validator(input.value.trim())
-            state.errors = [],
-            state.url = input.value.trim()
+            await schema.validate(text, { abortEarly: false })
+            watchedState.urlList.push(text)
+            watchedState.feedback.error = null
+            watchedState.feedback.success = 'feedback.success'
+            input.value = ''
         }
         catch (err) {
-            state.errors.push('Ссылка должна быть валидным URL')
+            err.errors.forEach(error => {
+                watchedState.feedback.error = error.key
+            })
         }
     })
-
-    subscribe(state, () => {
-        updateUI()
-    })
-}
-
-const updateUI = () => {
-    const feedback = document.querySelector('.feedback')
-    const input = document.querySelector('#url-input')
-    const { url, errors } = snapshot(state)
-    if  (errors.length === 0){
-        input.classList.remove('is-invalid')
-        feedback.textContent = `${url} is valid`
-    }
-    else {
-        input.classList.add('is-invalid')
-        feedback.textContent = state.errors.join(' ')
-    }
 }
