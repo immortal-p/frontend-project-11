@@ -95,13 +95,18 @@ export default (elements, i18n, state) => {
 
 
     const watchedState = onChange(state, (path) => {
+        console.log(path)
         switch (path) {
         case 'formStatus.error' :
             generateErrorUrl()
             break
         case 'formStatus.status' :
             generateCurrectUrl()
+            break
+        case 'posts':
             generatePost()
+            break
+        case 'feeds':
             generateFeed()
             break
         default :
