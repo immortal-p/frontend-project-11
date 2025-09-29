@@ -29,18 +29,39 @@ const addNewFeed = (parse, state, url) => {
     return feedId
 }
 
-const addPostList = (parse, state, feedId) => {
+const addPostList = (parse, watchedState, feedId) => {
     const items = [...parse.querySelectorAll('item')]
 
-    items.forEach(item => {
-        const post = {
-            id: uniqueId('post_'),
-            feedId,
-            title: item.querySelector('title').textContent,
-            link: item.querySelector('link').textContent,
+    const freshPosts = items.map(item => ({
+        id: uniqueId('post_'),
+        feedId,
+        title: item.querySelector('title').textContent,
+        link: item.querySelector('link').textContent,
+    }))
+
+    const uniqueNewPosts = freshPosts.filter(freshPost => !watchedState.posts.some(existingPost => existingPost.link === freshPost.link))
+    
+    if(uniqueNewPosts.length > 0) {
+        watchedState.posts.unshift(...uniqueNewPosts)
+    }
+    
+}
+
+const updatePosts = async (state) => {
+    const updatePromises = state.feeds.map(async (feed) => {
+        try {
+            const response = await axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${feed.url}`)
+            const { contents } = response.data
+            const parse = parserData(contents)
+            addPostList(parse, state, feed.id)
         }
-        state.posts.push(post)
+        catch (err) {
+            console.log(`Network error ${err}`)
+        }
     })
+
+    await Promise.all(updatePromises)
+    setTimeout(() => updatePosts(state), 5000)
 }
 
 export default async () => {
@@ -70,6 +91,8 @@ export default async () => {
     })
 
     const watchedState = watch(elements, i18n, state)
+
+    updatePosts(watchedState)
     
     yup.setLocale({
         string: {
@@ -78,7 +101,7 @@ export default async () => {
     })
 
 
-    const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists'}), value => !state.submittedUrls.includes(value))
+    const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists'}), value => !watchedState.submittedUrls.includes(value))
 
 
     const container = document.querySelector('.container-fluid')
@@ -94,8 +117,8 @@ export default async () => {
             if (response.status === 200) {
                 const { contents } = response.data
                 const parser = parserData(contents)
-                const feedId = addNewFeed(parser, state, url)
-                addPostList(parser, state, feedId)
+                const feedId = addNewFeed(parser, watchedState, url)
+                addPostList(parser, watchedState, feedId)
             }
             else {
                 watchedState.formStatus.errors = 'networkError'
@@ -103,12 +126,12 @@ export default async () => {
             watchedState.formStatus.error = null
             watchedState.formStatus.status = null
             watchedState.formStatus.status = 'formStatus.success'
-            state.submittedUrls.push(url)
+            watchedState.submittedUrls.push(url)
             input.value = ''
         }
         catch (err) {
             if ( err.message === 'rssParsingError' ) {
-                state.formStatus.error = 'errors.invalidRss'
+                watchedState.formStatus.error = 'errors.invalidRss'
             } 
             else if(err.isAxiosError) {
                 watchedState.formStatus.error = 'errors.networkError'
@@ -117,7 +140,7 @@ export default async () => {
                 watchedState.formStatus.error = err.inner[0].message.key
             }
             else {
-                state.formStatus.error = 'errors.unknownError'
+                watchedState.formStatus.error = 'errors.unknownError'
             }
         }
     })
