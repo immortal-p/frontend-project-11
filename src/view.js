@@ -39,8 +39,8 @@ export default (elements, i18n, state) => {
             el.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
 
             const a = document.createElement('a')
-            a.setAttribute('href', post.link)
             a.classList.add('fw-bold')
+            a.setAttribute('href', post.link)
             a.setAttribute('data-id', post.id)
             a.setAttribute('target', '_blank')
             a.setAttribute('rel', 'noopener noreferrer')
@@ -95,19 +95,18 @@ export default (elements, i18n, state) => {
 
 
     const watchedState = onChange(state, (path) => {
-        console.log(path)
-        switch (path) {
-        case 'formStatus.error' :
-            generateErrorUrl()
-            break
-        case 'formStatus.status' :
+        switch(path) {
+        case 'formStatus.status':
             generateCurrectUrl()
             break
-        case 'posts':
-            generatePost()
+        case 'formStatus.error':
+            generateErrorUrl()
             break
         case 'feeds':
             generateFeed()
+            break
+        case 'posts':
+            generatePost()
             break
         default :
             break

@@ -32,37 +32,38 @@ const addNewFeed = (parse, state, url) => {
 const addPostList = (parse, watchedState, feedId) => {
     const items = [...parse.querySelectorAll('item')]
 
-    const freshPosts = items.map(item => ({
-        id: uniqueId('post_'),
-        feedId,
-        title: item.querySelector('title').textContent,
-        link: item.querySelector('link').textContent,
-    }))
-
-    const uniqueNewPosts = freshPosts.filter(freshPost => !watchedState.posts.some(existingPost => existingPost.link === freshPost.link))
+    const uniqueNewPosts = items
+        .map(item => ({
+            feedId,
+            title: item.querySelector('title').textContent,
+            link: item.querySelector('link').textContent,
+        }))
+        .filter(post => !watchedState.posts.some(p => p.link === post.link))
+        .map(post => ({ ...post, id: uniqueId('post_') }))
     
-    if(uniqueNewPosts.length > 0) {
+    console.log(uniqueNewPosts)
+    if(uniqueNewPosts.length) {
         watchedState.posts.unshift(...uniqueNewPosts)
     }
-    
 }
 
-const updatePosts = async (state) => {
-    const updatePromises = state.feeds.map(async (feed) => {
+const updatePosts = async (watchedState) => {
+    const updatePromises = watchedState.feeds.map( async (feed) => {
         try {
             const response = await axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${feed.url}`)
             const { contents } = response.data
             const parse = parserData(contents)
-            addPostList(parse, state, feed.id)
+            addPostList(parse, watchedState, feed.id)
         }
         catch (err) {
-            console.log(`Network error ${err}`)
+            console.log(`Network error ${err.message}`)
         }
     })
 
     await Promise.all(updatePromises)
-    setTimeout(() => updatePosts(state), 5000)
+    setTimeout(() => updatePosts(watchedState), 5000)
 }
+
 
 export default async () => {
     const defaultLang = 'ru'
