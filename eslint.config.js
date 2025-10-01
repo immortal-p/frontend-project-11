@@ -26,7 +26,7 @@ export default [
       'semi': ['error', 'never'],
       'quotes': ['error', 'single'],
       'brace-style': ['error', 'stroustrup'],
-      'indent': ['error', 2, 'SwitchCase', 1 ],
+      'indent': ['error', 2, 'SwitchCase', 1],
       'comma-dangle': ['error', 'always-multiline'],
       'no-unused-vars': 'error',
       'no-undef': 'error',
