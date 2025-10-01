@@ -7,9 +7,10 @@ export default {
             },
             errors: {
                 invalidUrl: 'Ссылка должна быть валидным URL',
-                rssExists: 'Этот RSS уже загружен',
+                emptyUrl: 'Не должно быть пустым',
+                rssExists: 'RSS уже существует',
                 rssNot: 'Ресурс не содержит валидный RSS',
-                invalidRss: 'Ресурс не содержит валидный RSS-поток',
+                invalidRss: ' Ресурс не содержит валидный RSS',
                 networkError: 'Ошибка сети',
                 unknownError: 'Неизвестная ошибка',
             },
