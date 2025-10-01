@@ -37,6 +37,7 @@ const addPostList = (parse, watchedState, feedId) => {
             feedId,
             title: item.querySelector('title').textContent,
             link: item.querySelector('link').textContent,
+            description: item.querySelector('description').textContent,
         }))
         .filter(post => !watchedState.posts.some(p => p.link === post.link))
         .map(post => ({ ...post, id: uniqueId('post_') }))
@@ -66,7 +67,11 @@ const updatePosts = async (watchedState) => {
 
 
 export default async () => {
-    const defaultLang = 'ru'
+    const DEFAULT_LANG = 'ru'
+
+    const modal = document.querySelector('.modal')
+    const modalTitle = modal.querySelector('.modal-title')
+    const modalBody = modal.querySelector('.modal-body')
 
     const elements = {
         formStatus: document.querySelector('.feedback'),
@@ -81,12 +86,37 @@ export default async () => {
         },
         feeds: [],
         posts: [],
+        viewedPosts: [],
         submittedUrls: [],
     }
 
+    elements.posts.addEventListener('click', (e) => {
+        e.preventDefault()
+
+        const clickedEl = e.target
+        if(clickedEl.tagName !== 'A' && clickedEl.tagName !== 'BUTTON') return
+        const postElement = clickedEl.closest('li')
+        const link = postElement.querySelector('a')
+
+        link.classList.remove('fw-bold')
+        link.classList.add('fw-normal', 'link-secondary')
+
+        const postId = link.dataset.id
+        const currentPost = state.posts.find(post => post.id === postId)
+
+        const text = currentPost.title
+        const description = currentPost.description
+        modalTitle.textContent = text
+        modalBody.textContent = description
+
+        if(!state.viewedPosts.includes(postId)) {
+            state.viewedPosts.push(postId)
+        }
+    })
+
     const i18n = i18next.createInstance()
     await i18n.init({
-        lng: defaultLang,
+        lng: DEFAULT_LANG,
         debug: false,
         resources,
     })
