@@ -5,11 +5,11 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
   },
   server: {
     fs: {
-      allow: ['..']
-    }
+      allow: ['..'],
+    },
   },
 })

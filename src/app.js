@@ -47,7 +47,7 @@ const addPostList = (parse, watchedState, feedId) => {
 }
 
 const updatePosts = async (watchedState) => {
-  const updatePromises = watchedState.feeds.map( async (feed) => {
+  const updatePromises = watchedState.feeds.map(async (feed) => {
     try {
       const response = await axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${feed.url}`)
       const { contents } = response.data
@@ -79,7 +79,7 @@ export default async () => {
   const state = {
     formStatus: {
       status: null,
-      error : null,
+      error: null,
     },
     feeds: [],
     posts: [],
@@ -121,16 +121,14 @@ export default async () => {
   const watchedState = watch(elements, i18n, state)
 
   updatePosts(watchedState)
-    
+
   yup.setLocale({
     string: {
       url: () => ({ key: 'errors.invalidUrl' }),
     },
   })
 
-
-  const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists'}), value => !watchedState.submittedUrls.includes(value))
-
+  const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists' }), value => !watchedState.submittedUrls.includes(value))
 
   const container = document.querySelector('.container-fluid')
   const input = document.querySelector('#url-input')
@@ -158,9 +156,9 @@ export default async () => {
       input.value = ''
     }
     catch (err) {
-      if ( err.message === 'rssParsingError' ) {
+      if (err.message === 'rssParsingError') {
         watchedState.formStatus.error = 'errors.invalidRss'
-      } 
+      }
       else if (err.isAxiosError) {
         watchedState.formStatus.error = 'errors.networkError'
       }

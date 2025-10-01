@@ -34,7 +34,7 @@ export default (elements, i18n, state) => {
     const ul = document.createElement('ul')
     ul.classList.add('list-group', 'border-0', 'rounded-0')
 
-    state.posts.forEach(post => {
+    state.posts.forEach((post) => {
       const el = document.createElement('li')
       el.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
 
@@ -62,7 +62,6 @@ export default (elements, i18n, state) => {
     posts.append(card)
   }
 
-
   const generateFeed = () => {
     feeds.innerHTML = ''
 
@@ -73,7 +72,7 @@ export default (elements, i18n, state) => {
     const ul = document.createElement('ul')
     ul.classList.add('list-group', 'border-0', 'rounded-0')
 
-    state.feeds.forEach(feed => {
+    state.feeds.forEach((feed) => {
       const el = document.createElement('li')
       el.classList.add('list-group-item', 'border-0', 'border-end-0')
 
@@ -93,23 +92,22 @@ export default (elements, i18n, state) => {
     feeds.append(card)
   }
 
-
   const watchedState = onChange(state, (path) => {
-    switch(path) {
-    case 'formStatus.status':
-      generateCurrectUrl()
-      break
-    case 'formStatus.error':
-      generateErrorUrl()
-      break
-    case 'feeds':
-      generateFeed()
-      break
-    case 'posts':
-      generatePost()
-      break
-    default :
-      break
+    switch (path) {
+      case 'formStatus.status':
+        generateCurrectUrl()
+        break
+      case 'formStatus.error':
+        generateErrorUrl()
+        break
+      case 'feeds':
+        generateFeed()
+        break
+      case 'posts':
+        generatePost()
+        break
+      default :
+        break
     }
   })
 
