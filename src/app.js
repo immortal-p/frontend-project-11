@@ -10,7 +10,7 @@ const parserData = (content) => {
   const xml = parser.parseFromString(content, 'application/xml')
 
   const parserError = xml.querySelector('parsererror')
-  if(parserError) {
+  if (parserError) {
     throw new Error('rssParsingError')
   }
   return xml
@@ -91,7 +91,7 @@ export default async () => {
     e.preventDefault()
 
     const clickedEl = e.target
-    if(clickedEl.tagName !== 'A' && clickedEl.tagName !== 'BUTTON') return
+    if (clickedEl.tagName !== 'A' && clickedEl.tagName !== 'BUTTON') return
     const postElement = clickedEl.closest('li')
     const link = postElement.querySelector('a')
 
@@ -106,7 +106,7 @@ export default async () => {
     modalTitle.textContent = text
     modalBody.textContent = description
 
-    if(!state.viewedPosts.includes(postId)) {
+    if (!state.viewedPosts.includes(postId)) {
       state.viewedPosts.push(postId)
     }
   })
@@ -161,10 +161,10 @@ export default async () => {
       if ( err.message === 'rssParsingError' ) {
         watchedState.formStatus.error = 'errors.invalidRss'
       } 
-      else if(err.isAxiosError) {
+      else if (err.isAxiosError) {
         watchedState.formStatus.error = 'errors.networkError'
       }
-      else if(err.inner) {
+      else if (err.inner) {
         watchedState.formStatus.error = err.inner[0].message.key
       }
       else {
