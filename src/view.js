@@ -19,7 +19,7 @@ export default (elements, i18n, state) => {
     cardBody.classList.add('card-body')
     const heading = document.createElement('h2')
     heading.classList.add('card-title', 'h4')
-    heading.textContent = container.classList.contains('posts') ? 'Посты' : 'Фиды'
+    heading.textContent = container.classList.contains('posts') ? i18n.t('ui.posts') : i18n.t('ui.feeds')
     cardBody.append(heading)
     return cardBody
   }
@@ -52,7 +52,7 @@ export default (elements, i18n, state) => {
       btn.setAttribute('data-id', post.id)
       btn.setAttribute('data-bs-toggle', 'modal')
       btn.setAttribute('data-bs-target', '#modal')
-      btn.textContent = 'Просмотр'
+      btn.textContent = i18n.t('ui.view')
 
       el.append(a, btn)
       ul.append(el)
