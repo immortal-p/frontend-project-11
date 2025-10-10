@@ -17,7 +17,7 @@ export default {
       ui: {
         posts: 'Posts',
         feeds: 'Feeds',
-        view: 'view'
+        view: 'view',
       },
     },
   },
