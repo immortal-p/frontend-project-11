@@ -5,7 +5,7 @@ import watch from './view.js'
 import axios from 'axios'
 import { uniqueId } from 'lodash'
 
-const parserData = (content) => {
+const getData = (content) => {
   const parser = new DOMParser()
   const xml = parser.parseFromString(content, 'application/xml')
 
@@ -51,7 +51,7 @@ const updatePosts = async (watchedState) => {
     try {
       const response = await axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${feed.url}`)
       const { contents } = response.data
-      const parse = parserData(contents)
+      const parse = getData(contents)
       addPostList(parse, watchedState, feed.id)
     }
     catch (err) {
@@ -142,7 +142,7 @@ export default async () => {
       const response = await axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
       if (response.status === 200) {
         const { contents } = response.data
-        const parser = parserData(contents)
+        const parser = getData(contents)
         const feedId = addNewFeed(parser, watchedState, url)
         addPostList(parser, watchedState, feedId)
       }
@@ -158,12 +158,15 @@ export default async () => {
     catch (err) {
       if (err.message === 'rssParsingError') {
         watchedState.formStatus.error = 'errors.invalidRss'
+        return
       }
-      else if (err.isAxiosError) {
+      if (err.isAxiosError) {
         watchedState.formStatus.error = 'errors.networkError'
+        return
       }
-      else if (err.inner) {
+      if (err.inner) {
         watchedState.formStatus.error = err.inner[0].message.key
+        return
       }
       else {
         watchedState.formStatus.error = 'errors.unknownError'
