@@ -130,12 +130,13 @@ export default async () => {
 
   const schema = yup.string().url().test('not-exists', () => ({ key: 'errors.rssExists' }), value => !watchedState.submittedUrls.includes(value))
 
+  const form = document.querySelector('form')
   const container = document.querySelector('.container-fluid')
-  const input = document.querySelector('#url-input')
 
   container.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const url = input.value.trim()
+    const formData = new FormData(form)
+    const url = formData.get('url').trim()
 
     try {
       await schema.validate(url, { abortEarly: false })
@@ -153,7 +154,7 @@ export default async () => {
       watchedState.formStatus.status = null
       watchedState.formStatus.status = 'formStatus.success'
       watchedState.submittedUrls.push(url)
-      input.value = ''
+      form.reset()
     }
     catch (err) {
       if (err.message === 'rssParsingError') {
