@@ -165,9 +165,3 @@ To deploy your project:
 ## Credits
 
 Project created as part of the **Hexlet Frontend Developer Program**.
-
----
-
-## License
-
-This project is distributed under the MIT License.
