@@ -1,4 +1,4 @@
-# Frontend Project 11 — RSS Aggregator
+# Infostorm — RSS Aggregator
 
 ### Hexlet Tests and Linter Status
 
